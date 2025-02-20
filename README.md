@@ -1,1 +1,1 @@
-# Options-Calculator
+# Options Calculator
