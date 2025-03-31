@@ -4,7 +4,7 @@ from statistics import NormalDist
 import numpy as np
 from scipy.stats import norm
 
-def d1_d2_stdlib(s: float, k: float, r: float, sigma: float, t: float) -> tuple[float, float]:
+def d1_d2_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float) -> tuple[float, float]:
     """
     Calculates d1 and d2 for a european option (call or put),whose underlying pays a continuous dividend yield q, using the Python standard library
 
@@ -15,6 +15,7 @@ def d1_d2_stdlib(s: float, k: float, r: float, sigma: float, t: float) -> tuple[
         r (_float_): Risk-free rate (Annual)
         sigma (_float_): Volatility of the underlying (Annual)
         t (_float_): Time to expiration
+        q (_float_): Continuous dividend yield
 
     Returns:
         tuple[float, float]: d1 and d2
@@ -26,7 +27,7 @@ def d1_d2_stdlib(s: float, k: float, r: float, sigma: float, t: float) -> tuple[
     return d1, d2
 
 
-def d1_d2_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array) -> tuple[np.array, np.array]:
+def d1_d2_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array) -> tuple[np.array, np.array]:
     """
     Calculates d1 and d2 for a european option (call or put), whose underlying pays a continuous dividend yield q, for speed & vectorized operations
 
@@ -36,6 +37,7 @@ def d1_d2_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.a
         r (_np.array_): Risk-free rate (Annual)
         sigma (_np.array_): Volatility of the underlying (Annual)
         t (_np.array_): Time to expiration
+        q (_np.array_): Continuous dividend yield
 
     Returns:
         tuple[np.array, np.array]: d1 and d2
@@ -47,7 +49,7 @@ def d1_d2_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.a
     return d1, d2
 
 
-def black_scholes_stdlib(s: float, k: float, r: float, sigma: float, t: float, flag: str, d1: float = None, d2: float = None) -> float:
+def black_scholes_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float, flag: str, d1: float = None, d2: float = None) -> float:
     """
     Calculates the price of a european option (call or put), whose underlying pays a continuous dividend yield q, using the Python standard library
 
@@ -57,6 +59,7 @@ def black_scholes_stdlib(s: float, k: float, r: float, sigma: float, t: float, f
         r (_float_): Risk-free rate (Annual)
         sigma (_float_): Volatility of the underlying (Annual)
         t (_float_): Time to expiration
+        q (_float_): Continuous dividend yield
         flag (_str_): Determines the type of the option
         d1 (_float_): The precalculated value for d1
         d2 (_float_): The precalculated value for d2
@@ -73,7 +76,7 @@ def black_scholes_stdlib(s: float, k: float, r: float, sigma: float, t: float, f
         raise ValueError("Invalid option type")   
 	
 
-def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, flag: str, d1: np.array = None, d2: np.array = None) -> np.array:
+def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: float, flag: str, d1: np.array = None, d2: np.array = None) -> np.array:
     """
     Calculates the delta of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
 
@@ -83,9 +86,10 @@ def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array,
         r (_np.array_): Risk-free rate (Annual)
         sigma (_np.array_): Volatility of the underlying (Annual)
         t (_np.array_): Time to expiration
+        q (_np.array_): Continuous dividend yield
         flag (_str_): Determines the type of the option
         d1 (_np.array_): The precalculated value for d1
-        d2 (_float_): The precalculated value for d2
+        d2 (_np.array_): The precalculated value for d2
         
     Returns:
         np.array: The price of the option
@@ -100,7 +104,7 @@ def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array,
 
 
 
-def bs_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: float = None, d2: float = None) -> float:
+def bs_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float, d1: float = None, d2: float = None) -> float:
     """
     Calculates the price of a european call option, whose underlying pays a continuous dividend yield q, using the Python standard library
 
@@ -110,6 +114,7 @@ def bs_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: flo
         r (_float_): Risk-free rate (Annual)
         sigma (_float_): Volatility of the underlying (Annual)
         t (_float_): Time to expiration
+        q (_float_): Continuous dividend yield
         d1 (_float_): The precalculated value for d1
         d2 (_float_): The precalculated value for d2
 
@@ -128,7 +133,7 @@ def bs_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: flo
     return call_price
 
 
-def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, d1: np.array = None, d2: np.array = None) -> np.array:
+def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: float d1: np.array = None, d2: np.array = None) -> np.array:
     """
     Calculates the price of a european call option, whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
 
@@ -138,6 +143,7 @@ def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np
         r (_np.array_): Risk-free rate (Annual)
         sigma (_np.array_): Volatility of the underlying (Annual)
         t (_np.array_): Time to expiration
+        q (_np.array_): Continuous dividend yield
         d1 (_np.array_): The precalculated value for d1
         d2 (_np.array_): The precalculated value for d2
 
@@ -156,7 +162,7 @@ def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np
     return call_price
 
 
-def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: float = None, d2: float = None) -> float:
+def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float, d1: float = None, d2: float = None) -> float:
     """
     Calculates the price of a european put option, whose underlying pays a continuous dividend yield q, using the Python standard library
 
@@ -166,6 +172,7 @@ def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: floa
         r (_float_): Risk-free rate (Annual)
         sigma (_float_): Volatility of the underlying (Annual)
         t (_float_): Time to expiration
+        q (_float_): Continuous dividend yield
         d1 (_float_): The precalculated value for d1
         d2 (_float_): The precalculated value for d2
 
@@ -183,7 +190,7 @@ def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: floa
     
     return put_price
 
-def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array) -> np.array:
+def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, d1: np.float = None, d2: np.float = None) -> np.array:
     """
     Calculates the price of a european put option, whose underlying pays a continuous dividend yield q, using numpy & scipy, for speed & vectorized operations
 
@@ -193,6 +200,7 @@ def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.
         r (_np.array_): Risk-free rate (Annual)
         sigma (_np.array_): Volatility of the underlying (Annual)
         t (_np.array_): Time to expiration
+        q (_np.array_): Continuous dividend yield
         d1 (_np.array_): The precalculated value for d1
         d2 (_np.array_): The precalculated value for d2    
 
@@ -209,7 +217,3 @@ def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.
     put_price = norm.cdf(-d2) * k * (np.exp(-r*t)) - norm.cdf(-d1) * s
     
     return put_price
-    
-    
-    
-    d1 = ( math.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * math.sqrt(t))
