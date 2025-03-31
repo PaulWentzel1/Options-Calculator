@@ -69,9 +69,9 @@ def black_scholes_stdlib(s: float, k: float, r: float, sigma: float, t: float, q
     """
     
     if flag.lower() == "c":
-        return bs_call_stdlib(s, k, r, sigma, t, d1, d2)
+        return bs_call_stdlib(s, k, r, sigma, t, q, d1, d2)
     elif flag.lower() == "p":
-        return bs_put_stdlib(s, k, r, sigma, t, d1, d2)
+        return bs_put_stdlib(s, k, r, sigma, t, q, d1, d2)
     else:
         raise ValueError("Invalid option type")   
 	
@@ -96,9 +96,9 @@ def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array,
     """
 
     if flag.lower() == "c":
-        return	bs_call_vector(s, k, r, sigma, t, d1, d2)
+        return	bs_call_vector(s, k, r, sigma, t, q, d1, d2)
     elif flag.lower() == "p":
-        return	bs_put_vector(s, k, r, sigma, t, d1, d2)
+        return	bs_put_vector(s, k, r, sigma, t, q, d1, d2)
     else:
         raise ValueError("Invalid option type")
 
@@ -133,7 +133,7 @@ def bs_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: floa
     return call_price
 
 
-def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: float d1: np.array = None, d2: np.array = None) -> np.array:
+def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: float, d1: np.array = None, d2: np.array = None) -> np.array:
     """
     Calculates the price of a european call option, whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
 
@@ -190,7 +190,7 @@ def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float
     
     return put_price
 
-def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, d1: np.float = None, d2: np.float = None) -> np.array:
+def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, d1: np.array = None, d2: np.array = None) -> np.array:
     """
     Calculates the price of a european put option, whose underlying pays a continuous dividend yield q, using numpy & scipy, for speed & vectorized operations
 
