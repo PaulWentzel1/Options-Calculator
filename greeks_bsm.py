@@ -1439,9 +1439,9 @@ def ultima_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.
 
 
 
-def paricharma_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float, d1: float = None, d2: float = None):
+def parmicharma_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float, d1: float = None, d2: float = None):
     """
-    Calculates the paricharma of a european (call or put) option, whose underlying pays a continuous dividend yield q, using the Python standard library
+    Calculates the parmicharma of a european (call or put) option, whose underlying pays a continuous dividend yield q, using the Python standard library
 
     Args:
         s (_float_): Current price of the underlying
@@ -1454,7 +1454,7 @@ def paricharma_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: f
         d2 (_float_): The precalculated value for d2
         
     Returns:
-        float: The paricharma of the option
+        float: The parmicharma of the option
     """
 
     if d1 == None:
@@ -1463,14 +1463,14 @@ def paricharma_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: f
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)
 
-    paricharma =
+    parmicharma =
 
-    return paricharma
+    return parmicharma
 
 
-def paricharma_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, flag: str, d1: np.array = None, d2: np.array = None) -> np.array:
+def parmicharma_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, flag: str, d1: np.array = None, d2: np.array = None) -> np.array:
     """
-    Calculates the paricharma of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
+    Calculates the parmicharma of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
 
     Args:
         s (_np.array_): Current price of the underlying
@@ -1484,7 +1484,7 @@ def paricharma_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t:
         d2 (_np.array_): The precalculated value for d2
 
     Returns:
-        np.array: The paricharma of the option
+        np.array: The parmicharma of the option
     """
 
     if d1 == None:
@@ -1493,6 +1493,6 @@ def paricharma_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t:
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)
 
-    paricharma = 
+    parmicharma = 
 
-    return paricharma
+    return parmicharma
