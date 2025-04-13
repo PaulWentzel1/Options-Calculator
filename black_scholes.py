@@ -74,7 +74,7 @@ def black_scholes_stdlib(s: float, k: float, r: float, sigma: float, t: float, f
 
 def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, flag: str, d1: np.array = None, d2: np.array = None) -> np.array:
     """
-    Calculates the delta of a european option (call or put), whose underlying pays no dividends, using numpy & scipy for speed & vectorized operations
+    Calculates the price of a european option (call or put), whose underlying pays no dividends, using numpy & scipy for speed & vectorized operations
 
     Args:
         s (_np.array_): Current price of the underlying
@@ -117,12 +117,12 @@ def bs_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: flo
     """
 
     if d1 == None:
-        d1 = ( math.log( s/k ) + (r + ( sigma ** 2 / 2 )) * t ) / (sigma * math.sqrt(t))
+        d1 = (math.log(s / k) + (r + (sigma ** 2 / 2)) * t) / (sigma * math.sqrt(t))
 
     if d2 == None:
         d2 = d1 - sigma * math.sqrt(t)
     
-    call_price = NormalDist().cdf(d1) * s - NormalDist().cdf(d2) * k * ( math.exp(-r*t) ) 
+    call_price = NormalDist().cdf(d1) * s - NormalDist().cdf(d2) * k * (math.exp(-r * t)) 
     
     return call_price
 
@@ -145,12 +145,12 @@ def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np
     """
 	
     if d1 == None:
-        d1 = ( math.log( s/k ) + (r + ( sigma ** 2 / 2 )) * t ) / (sigma * math.sqrt(t))
+        d1 = (np.log(s / k) + (r + (sigma ** 2 / 2)) * t) / (sigma * np.sqrt(t))
 
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)
            
-    call_price = norm.cdf(d1) * s - norm.cdf(d2) * k * ( np.exp(-r*t) ) 
+    call_price = norm.cdf(d1) * s - norm.cdf(d2) * k * (np.exp(-r * t)) 
     
     return call_price
 
@@ -173,7 +173,7 @@ def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: floa
     """
 
     if d1 == None:
-        d1 = ( math.log( s/k ) + (r + ( sigma ** 2 / 2 )) * t ) / (sigma * math.sqrt(t))
+        d1 = (math.log(s / k) + (r + (sigma ** 2 / 2)) * t) / (sigma * math.sqrt(t))
 
     if d2 == None:
         d2 = d1 - sigma * math.sqrt(t)
@@ -182,7 +182,8 @@ def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: floa
     
     return put_price
 
-def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array) -> np.array:
+
+def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, d1: np.array = None, d2: np.array = None) -> np.array:
     """
     Calculates the price of a european put option whose underlying pays no dividends, using numpy & scipy, for speed & vectorized operations
 
@@ -200,11 +201,11 @@ def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.
     """
 	
     if d1 == None:
-        d1 = ( math.log( s/k ) + (r + ( sigma ** 2 / 2 )) * t ) / (sigma * math.sqrt(t))
+        d1 = (np.log(s / k) + (r + (sigma ** 2 / 2)) * t) / (sigma * np.sqrt(t))
 
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)    
     
-    put_price = norm.cdf(-d2) * k * (np.exp(-r*t)) - norm.cdf(-d1) * s
+    put_price = norm.cdf(-d2) * k * (np.exp(-r * t)) - norm.cdf(-d1) * s
     
     return put_price
