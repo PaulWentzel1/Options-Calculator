@@ -19,7 +19,7 @@ def d1_d2_stdlib(s: float, k: float, r: float, sigma: float, t: float) -> tuple[
         tuple[float, float]: d1 and d2
     """
 
-    d1 = ( math.log( s/k ) + ( r + ( sigma ** 2 / 2 ) ) * t )  /  (sigma * math.sqrt(t))
+    d1 = ( math.log(s / k) + (r + (sigma ** 2 / 2 )) * t) / (sigma * math.sqrt(t))
     d2 = d1 - sigma * math.sqrt(t)
 
     return d1, d2
@@ -40,7 +40,7 @@ def d1_d2_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.a
         tuple[np.array, np.array]: d1 and d2
     """
 
-    d1 = ( np.log( s/k ) + ( r + ( sigma ** 2 / 2 ) ) * t )  /  (sigma * np.sqrt(t))
+    d1 = (np.log(s / k) + (r + (sigma ** 2 / 2)) * t) / (sigma * np.sqrt(t))
     d2 = d1 - sigma * np.sqrt(t)
 
     return d1, d2
@@ -91,9 +91,9 @@ def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array,
     """
 
     if flag.lower() == "c":
-        return	bs_call_vector(s, k, r, sigma, t, d1, d2)
+        return bs_call_vector(s, k, r, sigma, t, d1, d2)
     elif flag.lower() == "p":
-        return	bs_put_vector(s, k, r, sigma, t, d1, d2)
+        return bs_put_vector(s, k, r, sigma, t, d1, d2)
     else:
         raise ValueError("Invalid option type")
 
@@ -178,7 +178,7 @@ def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: floa
     if d2 == None:
         d2 = d1 - sigma * math.sqrt(t)
     
-    put_price = NormalDist().cdf(-d2) * k * (math.exp(-r*t)) - NormalDist().cdf(-d1) * s
+    put_price = NormalDist().cdf(-d2) * k * (math.exp(-r * t)) - NormalDist().cdf(-d1) * s
     
     return put_price
 
