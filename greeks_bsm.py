@@ -24,9 +24,9 @@ def delta_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: f
     """
 
     if d1 == None:
-        d1 = ( math.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * math.sqrt(t))
+        d1 = (math.log(s / k) + (r - q + (sigma ** 2 / 2) ) * t) / (sigma * math.sqrt(t))
 
-    delta = math.exp(-q*t) * NormalDist().cdf(d1)
+    delta = math.exp(-q * t) * NormalDist().cdf(d1)
 
     return delta
 
@@ -48,7 +48,7 @@ def delta_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t:
     """
 
     if d1 == None:
-        d1 = ( np.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t )  /  (sigma * np.sqrt(t))
+        d1 = (np.log(s / k) + (r - q + (sigma ** 2 / 2)) * t)  /  (sigma * np.sqrt(t))
     
     delta = np.exp(-q*t) * norm.cdf(d1)
 
@@ -1436,63 +1436,3 @@ def ultima_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.
     ultima = ( (-(s * np.exp(-q*t) * norm.pdf(d1) * np.sqrt(t))) / (sigma ** 2) ) * (d1*d2*(1 - d1 * d2) + d1 ** 2 + d2 ** 2) 
 
     return ultima
-
-
-
-def parmicharma_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float, d1: float = None, d2: float = None):
-    """
-    Calculates the parmicharma of a european (call or put) option, whose underlying pays a continuous dividend yield q, using the Python standard library
-
-    Args:
-        s (_float_): Current price of the underlying
-        k (_float_): Strike price
-        r (_float_): Risk-free rate (Annual)
-        sigma (_float_): Volatility of the underlying (Annual)
-        t (_float_): Time to expiration
-        q (_float_): Continuous dividend yield
-        d1 (_float_): The precalculated value for d1
-        d2 (_float_): The precalculated value for d2
-        
-    Returns:
-        float: The parmicharma of the option
-    """
-
-    if d1 == None:
-        d1 = ( math.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * math.sqrt(t))
-
-    if d2 == None:
-        d2 = d1 - sigma * np.sqrt(t)
-
-    parmicharma =
-
-    return parmicharma
-
-
-def parmicharma_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, flag: str, d1: np.array = None, d2: np.array = None) -> np.array:
-    """
-    Calculates the parmicharma of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
-
-    Args:
-        s (_np.array_): Current price of the underlying
-        k (_np.array_): Strike price
-        r (_np.array_): Risk-free rate (Annual)
-        sigma (_np.array_): Volatility of the underlying (Annual)
-        t (_np.array_): Time to expiration
-        q (_np.array_): Continuous dividend yield
-        flag (_str_): Determines the type of the option
-        d1 (_np.array_): The precalculated value for d1
-        d2 (_np.array_): The precalculated value for d2
-
-    Returns:
-        np.array: The parmicharma of the option
-    """
-
-    if d1 == None:
-        d1 = ( np.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * np.sqrt(t))
-
-    if d2 == None:
-        d2 = d1 - sigma * np.sqrt(t)
-
-    parmicharma = 
-
-    return parmicharma

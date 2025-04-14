@@ -21,7 +21,7 @@ def d1_d2_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float)
         tuple[float, float]: d1 and d2
     """
 
-    d1 = ( math.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * math.sqrt(t))
+    d1 = (math.log(s / k) + (r - q + (sigma ** 2 / 2)) * t) / (sigma * math.sqrt(t))
     d2 = d1 - sigma * math.sqrt(t)
 
     return d1, d2
@@ -43,7 +43,7 @@ def d1_d2_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.a
         tuple[np.array, np.array]: d1 and d2
     """
 
-    d1 = ( np.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * np.sqrt(t))
+    d1 = (np.log(s / k) + (r - q + (sigma ** 2 / 2)) * t) / (sigma * np.sqrt(t))
     d2 = d1 - sigma * np.sqrt(t)
 
     return d1, d2
@@ -123,12 +123,12 @@ def bs_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: floa
     """
 
     if d1 == None:
-        d1 = ( math.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * math.sqrt(t))
+        d1 = (math.log(s / k) + (r - q + (sigma ** 2 / 2) ) * t) / (sigma * math.sqrt(t))
 
     if d2 == None:
         d2 = d1 - sigma * math.sqrt(t)
     
-    call_price = NormalDist().cdf(d1) * s - NormalDist().cdf(d2) * k * ( math.exp(-r*t) ) 
+    call_price = NormalDist().cdf(d1) * s - NormalDist().cdf(d2) * k * (math.exp(-r * t)) 
     
     return call_price
 
@@ -152,12 +152,12 @@ def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np
     """
 	
     if d1 == None:
-        d1 = ( np.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * np.sqrt(t))
+        d1 = (np.log(s / k) + (r - q + (sigma ** 2 / 2)) * t) / (sigma * np.sqrt(t))
 
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)
            
-    call_price = norm.cdf(d1) * s - norm.cdf(d2) * k * ( np.exp(-r*t) ) 
+    call_price = norm.cdf(d1) * s - norm.cdf(d2) * k * (np.exp(-r * t)) 
     
     return call_price
 
@@ -181,7 +181,7 @@ def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float
     """
 
     if d1 == None:
-        d1 = ( math.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * math.sqrt(t))
+        d1 = (math.log(s / k) + (r - q + (sigma ** 2 / 2) ) * t) / (sigma * math.sqrt(t))
 
     if d2 == None:
         d2 = d1 - sigma * math.sqrt(t)
@@ -209,11 +209,11 @@ def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.
     """
 	
     if d1 == None:
-        d1 = ( np.log( s/k ) + ( r - q + ( sigma ** 2 / 2 ) ) * t ) / (sigma * np.sqrt(t))
+        d1 = (np.log(s / k) + (r - q + (sigma ** 2 / 2) ) * t) / (sigma * np.sqrt(t))
 
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)    
     
-    put_price = norm.cdf(-d2) * k * (np.exp(-r*t)) - norm.cdf(-d1) * s
+    put_price = norm.cdf(-d2) * k * (np.exp(-r * t)) - norm.cdf(-d1) * s
     
     return put_price
