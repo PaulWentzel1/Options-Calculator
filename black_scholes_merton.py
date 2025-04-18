@@ -76,9 +76,9 @@ def black_scholes_stdlib(s: float, k: float, r: float, sigma: float, t: float, q
         raise ValueError("Invalid option type")   
 	
 
-def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: float, flag: str, d1: np.array = None, d2: np.array = None) -> np.array:
+def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, flag: str, d1: np.array = None, d2: np.array = None) -> np.array:
     """
-    Calculates the delta of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
+    Calculates the price of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
 
     Args:
         s (_np.array_): Current price of the underlying
@@ -128,12 +128,12 @@ def bs_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: floa
     if d2 == None:
         d2 = d1 - sigma * math.sqrt(t)
     
-    call_price = NormalDist().cdf(d1) * s - NormalDist().cdf(d2) * k * (math.exp(-r * t)) 
+    call_price = s * math.exp(-q * t) * NormalDist().cdf(d1) - math.exp(-r * t) * k * NormalDist().cdf(d2)
     
     return call_price
 
 
-def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: float, d1: np.array = None, d2: np.array = None) -> np.array:
+def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, d1: np.array = None, d2: np.array = None) -> np.array:
     """
     Calculates the price of a european call option, whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
 
@@ -156,9 +156,9 @@ def bs_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np
 
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)
-           
-    call_price = norm.cdf(d1) * s - norm.cdf(d2) * k * (np.exp(-r * t)) 
     
+    call_price = s * np.exp(-q * t) * norm.cdf(d1) - np.exp(-r * t) * k * norm.cdf(d2)
+
     return call_price
 
 
@@ -186,8 +186,8 @@ def bs_put_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float
     if d2 == None:
         d2 = d1 - sigma * math.sqrt(t)
     
-    put_price = NormalDist().cdf(-d2) * k * (math.exp(-r*t)) - NormalDist().cdf(-d1) * s
-    
+    put_price = math.exp(-r * t) * k * NormalDist().cdf(-d2) - s * math.exp(-q * t) * NormalDist().cdf(-d1)
+
     return put_price
 
 def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, d1: np.array = None, d2: np.array = None) -> np.array:
@@ -214,6 +214,8 @@ def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)    
     
-    put_price = norm.cdf(-d2) * k * (np.exp(-r * t)) - norm.cdf(-d1) * s
+    put_price = np.exp(-r * t) * k * norm.cdf(-d2) - s * np.exp(-q * t) * norm.cdf(-d1)
     
     return put_price
+
+
