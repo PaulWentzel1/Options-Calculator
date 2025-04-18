@@ -1,11 +1,4 @@
-import math
-from statistics import NormalDist
-
-import numpy as np
-from scipy.stats import norm
-
 from black_scholes import black_scholes_stdlib
-
 
 
 if __name__ == "__main__":
@@ -17,3 +10,5 @@ if __name__ == "__main__":
 
     print(f"Call Option price: {black_scholes_stdlib(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, 'C'):.4f}")
     print(f"Put Option price: {black_scholes_stdlib(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, 'P'):.4f}")
+
+

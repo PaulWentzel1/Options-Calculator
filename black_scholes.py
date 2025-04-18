@@ -98,7 +98,6 @@ def black_scholes_vector(s: np.array, k: np.array, r: np.array, sigma: np.array,
         raise ValueError("Invalid option type")
 
 
-
 def bs_call_stdlib(s: float, k: float, r: float, sigma: float, t: float, d1: float = None, d2: float = None) -> float:
     """
     Calculates the price of a european call option whose underlying pays no dividends, using the Python standard library
@@ -209,3 +208,4 @@ def bs_put_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.
     put_price = norm.cdf(-d2) * k * (np.exp(-r * t)) - norm.cdf(-d1) * s
     
     return put_price
+
