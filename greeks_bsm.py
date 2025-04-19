@@ -899,7 +899,7 @@ def charm_call_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t:
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)
 
-    charm = q * np.exp(-q*t) * norm.cdf(d1) - np.exp(-q*t) * norm.cdf(d1) *((2*(r - q)* t - d2 * sigma * np.sqrt(t)) / (2 * t * sigma * np.sqrt(t)))
+    charm = q * np.exp(-q*t) * norm.cdf(d1) - np.exp(-q*t) * norm.pdf(d1) *((2*(r - q)* t - d2 * sigma * np.sqrt(t)) / (2 * t * sigma * np.sqrt(t)))
 
     return charm
 
@@ -1332,8 +1332,7 @@ def color_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float,
     if d2 == None:
         d2 = d1 - sigma * math.sqrt(t)
 
-
-    color = -math.exp(-q * t) * (NormalDist().pdf(d1) / (2 * s * t * sigma * math.sqrt(t))) * (2 * q * t + 1 + ((2*(r-q) * t - d2 * sigma * math.sqrt(t)) / (sigma* math.sqrt(t))) * d1)
+    color = -math.exp(-q * t) * (NormalDist().pdf(d1) / (2 * s * t * sigma * math.sqrt(t))) * (2 * q * t + 1 + (( 2* (r - q) * t - d2 * sigma * math.sqrt(t)) / (sigma * math.sqrt(t))) * d1)
 
     return color
 
@@ -1361,7 +1360,7 @@ def color_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.a
     
     if d2 == None:
         d2 = d1 - sigma * np.sqrt(t)
-
+    color = -math.exp(-q * t) * ((NormalDist().pdf(d1)) / (2 * s * t * sigma * math.sqrt(t))) * (2 * q * t+1 + ((2*(r-q) * t - d2 * sigma * math.sqrt(t)) / (sigma * math.sqrt(t))) * d1)
     color = -np.exp(-q * t) * (norm.pdf(d1) / (2 * s * t * sigma * np.sqrt(t))) * (2 * q * t + 1 + ((2 * (r - q) * t - d2 * sigma * np.sqrt(t)) / (sigma * np.sqrt(t))) * d1)
 
     return color
@@ -1465,12 +1464,9 @@ def first_order_greeks_stdlib(s: float, k: float, r: float, sigma: float, t: flo
         raise ValueError("Invalid option type")
 
 
-
-
-
 def first_order_greeks_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, flag: str, d1: np.array = None, d2: np.array = None) -> tuple[np.array, np.array, np.array, np.array, np.array]:
     """
-    Calculates the ultima of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
+    Calculates the first-order greeks of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
 
     Args:
         s (_np.array_): Current price of the underlying
@@ -1508,20 +1504,145 @@ def first_order_greeks_vector(s: np.array, k: np.array, r: np.array, sigma: np.a
         raise ValueError("Invalid option type")
 
 
-def second_order_greeks_stdlib():
-    pass
+def second_order_greeks_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float, flag: str, d1: float = None, d2: float = None) -> tuple[float, float, float, float, float]:
+    """
+    Calculates the second-order greeks of a european option (call or put), whose underlying pays a continuous dividend yield q, using the Python standard library
 
-def second_order_greeks_vector():
-    pass
+    Args:
+        s (_float_): Current price of the underlying
+        k (_float_): Strike price
+        r (_float_): Risk-free rate (Annual)
+        sigma (_float_): Volatility of the underlying (Annual)
+        t (_float_): Time to expiration
+        q (_float_): Continuous dividend yield
+        flag (_str_): Determines the type of the option
+        d1 (_float_): The precalculated value for d1
+        d2 (_float_): The precalculated value for d2
 
+    Returns:
+        tuple[float, float, float, float, float, float]: The 6 second-order greeks of the option
+    """
 
-def third_order_greeks_stdlib():
-    pass
+    if flag.lower() == "c":
+        gamma = gamma_stdlib(s, k, r, sigma, t, q, d1)
+        vanna = vanna_stdlib(s, k, r, sigma, t, q, d1, d2)
+        charm = charm_call_stdlib(s, k, r, sigma, t, q, d1, d2)
+        vomma = vomma_stdlib(s, k, r, sigma, t, q, d1, d2)
+        veta = veta_stdlib(s, k, r, sigma, t, q, d1)
+    
+        return gamma, vanna, charm, vomma, veta
+    
+    elif flag.lower() == "p":
+        gamma = gamma_stdlib(s, k, r, sigma, t, q, d1)
+        vanna = vanna_stdlib(s, k, r, sigma, t, q, d1, d2)
+        charm = charm_put_stdlib(s, k, r, sigma, t, q, d1, d2)
+        vomma = vomma_stdlib(s, k, r, sigma, t, q, d1, d2)
+        veta = veta_stdlib(s, k, r, sigma, t, q, d1)
+    
+        return gamma, vanna, charm, vomma, veta
+    
+    else:
+        raise ValueError("Invalid option type")
 
-def third_order_greeks_vector():
-    pass
+def second_order_greeks_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, flag: str, d1: np.array = None, d2: np.array = None) -> tuple[np.array, np.array, np.array, np.array, np.array]:
+    """
+    Calculates the second-order greeks of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
 
+    Args:
+        s (_np.array_): Current price of the underlying
+        k (_np.array_): Strike price
+        r (_np.array_): Risk-free rate (Annual)
+        sigma (_np.array_): Volatility of the underlying (Annual)
+        t (_np.array_): Time to expiration
+        q (_np.array_): Continuous dividend yield
+        flag (_str_): Determines the type of the option
+        d1 (_np.array_): The precalculated value for d1
+        d2 (_np.array_): The precalculated value for d2
 
+    Returns:
+       tuple[np.array, np.array, np.array, np.array, np.array, np.array]: The 6 second-order greeks of the option
+    """
+
+    if flag.lower() == "c":
+        gamma = gamma_vector(s, k, r, sigma, t, q, d1)
+        vanna = vanna_vector(s, k, r, sigma, t, q, d1, d2)
+        charm = charm_call_vector(s, k, r, sigma, t, q, d1, d2)
+        vomma = vomma_vector(s, k, r, sigma, t, q, d1, d2)
+        veta = veta_vector(s, k, r, sigma, t, q, d1)
+    
+        return gamma, vanna, charm, vomma, veta
+    
+    elif flag.lower() == "p":
+        gamma = gamma_vector(s, k, r, sigma, t, q, d1)
+        vanna = vanna_vector(s, k, r, sigma, t, q, d1, d2)
+        charm = charm_put_vector(s, k, r, sigma, t, q, d1, d2)
+        vomma = vomma_vector(s, k, r, sigma, t, q, d1, d2)
+        veta = veta_vector(s, k, r, sigma, t, q, d1)
+    
+        return gamma, vanna, charm, vomma, veta
+    
+    else:
+        raise ValueError("Invalid option type")
+
+def third_order_greeks_stdlib(s: float, k: float, r: float, sigma: float, t: float, q: float, flag: str, d1: float = None, d2: float = None) -> tuple[float, float, float, float, float]:
+    """
+    Calculates the third-order greeks of a european option (call or put), whose underlying pays a continuous dividend yield q, using the Python standard library
+
+    Args:
+        s (_float_): Current price of the underlying
+        k (_float_): Strike price
+        r (_float_): Risk-free rate (Annual)
+        sigma (_float_): Volatility of the underlying (Annual)
+        t (_float_): Time to expiration
+        q (_float_): Continuous dividend yield
+        flag (_str_): Determines the type of the option
+        d1 (_float_): The precalculated value for d1
+        d2 (_float_): The precalculated value for d2
+
+    Returns:
+        tuple[float, float, float, float]: The 4 third-order greeks of the option
+    """
+
+    if flag.lower() == "c" or  flag.lower() == "p":
+        speed = speed_stdlib(s, k, r, sigma, t, q, d1, d2)
+        zomma = zomma_stdlib(s, k, r, sigma, t, q, d1, d2)
+        color = color_stdlib(s, k, r, sigma, t, q, d1, d2)
+        ultima = ultima_stdlib(s, k, r, sigma, t, q, d1, d2)
+    
+        return speed, zomma, color, ultima
+
+    else:
+        raise ValueError("Invalid option type")
+
+def third_order_greeks_vector(s: np.array, k: np.array, r: np.array, sigma: np.array, t: np.array, q: np.array, flag: str, d1: np.array = None, d2: np.array = None) -> tuple[np.array, np.array, np.array, np.array, np.array]:
+    """
+    Calculates the third-order greeks of a european option (call or put), whose underlying pays a continuous dividend yield q, using numpy & scipy for speed & vectorized operations
+
+    Args:
+        s (_np.array_): Current price of the underlying
+        k (_np.array_): Strike price
+        r (_np.array_): Risk-free rate (Annual)
+        sigma (_np.array_): Volatility of the underlying (Annual)
+        t (_np.array_): Time to expiration
+        q (_np.array_): Continuous dividend yield
+        flag (_str_): Determines the type of the option
+        d1 (_np.array_): The precalculated value for d1
+        d2 (_np.array_): The precalculated value for d2
+
+    Returns:
+       tuple[np.array, np.array, np.array, np.array]: The 4 third-order greeks of the option
+    """
+
+    if flag.lower() == "c" or flag.lower() == "p":
+        speed = speed_vector(s, k, r, sigma, t, q, d1, d2)
+        zomma = zomma_vector(s, k, r, sigma, t, q, d1, d2)
+        color = color_vector(s, k, r, sigma, t, q, d1, d2)
+        ultima = ultima_vector(s, k, r, sigma, t, q, d1, d2)
+    
+        return speed, zomma, color, ultima
+
+    else:
+        raise ValueError("Invalid option type")
 
 if __name__ == "__main__":
     stock_price = 11
@@ -1529,7 +1650,13 @@ if __name__ == "__main__":
     time_to_maturity = 0.05
     risk_free_rate = 0.05
     volatility = 0.20
-    divies = 3.32
+    div = 3.32
 
-    print(first_order_greeks_stdlib(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, divies, "c"))
-    print(np.array([first_order_greeks_vector(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, divies, "c")]).round(decimals=3))
+    print(first_order_greeks_stdlib(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, div, "c"))
+    print(np.array([first_order_greeks_vector(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, div, "c")]).round(decimals=3))
+
+    print(second_order_greeks_stdlib(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, div, "c"))
+    print(np.array([second_order_greeks_vector(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, div, "c")]).round(decimals=3))
+
+    print(third_order_greeks_stdlib(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, div, "c"))
+    print(np.array([third_order_greeks_vector(stock_price, strike_price, risk_free_rate, volatility, time_to_maturity, div, "c")]).round(decimals=3))
